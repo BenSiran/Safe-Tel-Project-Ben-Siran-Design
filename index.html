@@ -1,1 +1,786 @@
 
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAFE TEL - سیستم هویت برند</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #1A2B3C;
+            overflow: hidden;
+        }
+        
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .slide-wrapper {
+            width: 1280px;
+            height: 720px;
+            background: white;
+            display: none;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slide-wrapper.active {
+            display: flex;
+        }
+        
+        .slide-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            direction: rtl;
+        }
+        
+        /* Navigation Controls */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background: #00BFFF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #1A2B3C;
+        }
+        
+        .nav-btn:disabled {
+            background: #CCCCCC;
+            cursor: not-allowed;
+        }
+        
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            color: #1A2B3C;
+            font-weight: 600;
+        }
+        
+        /* Slide 1: Title */
+        .slide-1 {
+            background: linear-gradient(135deg, #F0F2F5 0%, #FFFFFF 100%);
+            display: grid !important;
+            grid-template-columns: 1.2fr 1fr;
+            align-items: center;
+            gap: 60px;
+            padding: 80px 60px;
+        }
+        
+        .logo-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logo-section img {
+            width: 280px;
+            height: auto;
+            object-fit: contain;
+        }
+        
+        .text-section {
+            text-align: right;
+        }
+        
+        .main-title {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 52px;
+            font-weight: 700;
+            color: #1A2B3C;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            color: #666666;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        
+        .accent-line {
+            width: 60px;
+            height: 4px;
+            background: #00BFFF;
+            margin-bottom: 20px;
+            margin-left: auto;
+        }
+        
+        /* Slide 2: Vision */
+        .slide-2 {
+            background: #F0F2F5;
+            display: grid !important;
+            grid-template-columns: 1fr 1.2fr;
+            align-items: center;
+            gap: 40px;
+            padding: 60px;
+        }
+        
+        .image-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-section img {
+            width: 320px;
+            height: 320px;
+            object-fit: contain;
+        }
+        
+        .values-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .value-item {
+            border-right: 4px solid #00BFFF;
+            padding-right: 20px;
+        }
+        
+        .value-title {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A2B3C;
+            margin-bottom: 8px;
+        }
+        
+        .value-description {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            color: #555555;
+            line-height: 1.5;
+        }
+        
+        /* Slide 3: Challenge */
+        .slide-3 {
+            background: #F0F2F5;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .content-block {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: right;
+        }
+        
+        .block-title {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #00BFFF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .block-text {
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            color: #333333;
+            line-height: 1.6;
+        }
+        
+        /* Slide 4: Concept */
+        .slide-4 {
+            background: #F0F2F5;
+            display: grid !important;
+            grid-template-columns: 1fr 1.2fr;
+            align-items: center;
+            gap: 40px;
+            padding: 60px;
+        }
+        
+        .metaphors-container {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+        
+        .metaphor-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .metaphor-number {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: #00BFFF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .metaphor-title {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1A2B3C;
+        }
+        
+        .metaphor-description {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            color: #555555;
+            line-height: 1.6;
+        }
+        
+        /* Slide 5: Construction */
+        .slide-5 {
+            background: #F0F2F5;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px;
+        }
+        
+        .principles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .principle-block {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: right;
+        }
+        
+        .principle-title {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #00BFFF;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .principle-text {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            color: #333333;
+            line-height: 1.6;
+        }
+        
+        /* Slide 6: Palette */
+        .slide-6 {
+            background: #F0F2F5;
+            display: flex !important;
+            flex-direction: column;
+            padding: 60px;
+        }
+        
+        .palette-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            flex: 1;
+        }
+        
+        .color-item {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            flex-direction: row-reverse;
+        }
+        
+        .color-swatch {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #CCCCCC;
+            flex-shrink: 0;
+        }
+        
+        .color-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: right;
+        }
+        
+        .color-name {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1A2B3C;
+        }
+        
+        .color-codes {
+            font-family: 'Roboto', sans-serif;
+            font-size: 12px;
+            color: #666666;
+            line-height: 1.4;
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .color-rationale {
+            font-family: 'Roboto', sans-serif;
+            font-size: 13px;
+            color: #555555;
+            line-height: 1.5;
+        }
+        
+        .color-swatch.navy { background: #1A2B3C; }
+        .color-swatch.cyan { background: #00BFFF; }
+        .color-swatch.silver { background: #B0B0B0; }
+        .color-swatch.white { background: #FFFFFF; }
+        
+        /* Slide 7: Versatility */
+        .slide-7 {
+            background: #F0F2F5;
+            display: grid !important;
+            grid-template-columns: 1fr 1.2fr;
+            align-items: center;
+            gap: 40px;
+            padding: 60px;
+        }
+        
+        .logo-variants {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 380px;
+        }
+        
+        .logo-variant-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-variant-title {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #1A2B3C;
+        }
+        
+        /* Slide 8: Typography */
+        .slide-8 {
+            background: #F0F2F5;
+            display: flex !important;
+            flex-direction: column;
+            padding: 60px;
+        }
+        
+        .font-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            flex: 1;
+        }
+        
+        .font-block {
+            border-right: 4px solid #00BFFF;
+            padding-right: 20px;
+        }
+        
+        .font-title {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1A2B3C;
+            margin-bottom: 10px;
+        }
+        
+        .font-example {
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 36px;
+            font-weight: 400;
+            color: #555555;
+            line-height: 1.5;
+        }
+        
+        .font-description {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            color: #666666;
+            line-height: 1.6;
+        }
+        
+        /* Slide 9: Conclusion */
+        .slide-9 {
+            background: linear-gradient(135deg, #1A2B3C 0%, #00BFFF 100%);
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px;
+        }
+        
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        
+        .conclusion-block {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: right;
+        }
+        
+        .accent-divider {
+            width: 60px;
+            height: 3px;
+            background: #00BFFF;
+            margin-right: auto;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide-wrapper active">
+            <div class="slide-container slide-1">
+                <div class="logo-section">
+                    <svg width="280" height="280" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M140 20 L180 60 L180 100 L140 140 L100 100 L100 60 Z" fill="#1A2B3C"/>
+                        <path d="M100 80 L140 120 L180 80" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+                        <path d="M70 140 L140 200 L210 140" fill="#1A2B3C"/>
+                    </svg>
+                </div>
+                <div class="text-section">
+                    <div class="accent-line"></div>
+                    <h1 class="main-title">تضمین آینده ارتباطات همراه پیشرفته</h1>
+                    <p class="subtitle">یک سیستم هویت بصری جامع</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 2: Vision -->
+        <div class="slide-wrapper">
+            <div class="slide-container slide-2">
+                <div class="image-section">
+                    <div style="width: 320px; height: 320px; background: linear-gradient(135deg, #00BFFF 0%, #1A2B3C 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <div style="font-size: 120px; color: white;">🛡️</div>
+                    </div>
+                </div>
+                <div class="text-section">
+                    <h2 class="main-title" style="font-size: 40px;">رهبری بازار بر پایه اعتماد و برتری فناوری بنا شده است</h2>
+                    <div class="values-container">
+                        <div class="value-item">
+                            <div class="value-title">امنیت</div>
+                            <div class="value-description">تعهد تزلزل‌ناپذیر به حفاظت از داده‌ها و دستگاه</div>
+                        </div>
+                        <div class="value-item">
+                            <div class="value-title">کیفیت برتر</div>
+                            <div class="value-description">ارائه تنها محصولات و خدمات با بالاترین درجه کیفیت</div>
+                        </div>
+                        <div class="value-item">
+                            <div class="value-title">نوآوری</div>
+                            <div class="value-description">پیشگامی در فناوری ارتباطات همراه</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Challenge -->
+        <div class="slide-wrapper">
+            <div class="slide-container slide-3">
+                <h2 class="main-title" style="margin-bottom: 60px; max-width: 900px;">مخاطبان سطح بالای ما تقاضای همگرایی امنیت و پیچیدگی را دارند</h2>
+                <div class="content-grid">
+                    <div class="content-block">
+                        <div class="block-title">مخاطب هدف</div>
+                        <div class="block-text">مصرف‌کنندگان متمول، متخصصان کسب‌وکار و شرکت‌هایی که به دنبال دستگاه‌های همراه امن و با عملکرد بالا هستند</div>
+                    </div>
+                    <div class="content-block">
+                        <div class="block-title">شکاف بازار</div>
+                        <div class="block-text">بازار فاقد برندی است که از نظر بصری و عملکردی، امنیت در سطح نظامی را با طراحی مینیمالیستی متعادل کند</div>
+                    </div>
+                    <div class="content-block">
+                        <div class="block-title">جایگاه ما</div>
+                        <div class="block-text">سیف تل این شکاف را پر می‌کند و خود را به عنوان انتخاب امن و سطح بالا برای فناوری همراه تثبیت می‌کند</div>
+                    </div>
+                    <div class="content-block">
+                        <div class="block-title">روایت</div>
+                        <div class="block-text">هویت برند باید داستانی جذاب از حفاظت را بدون قربانی کردن ظرافت بیان کند</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4: Concept -->
+        <div class="slide-wrapper">
+            <div class="slide-container slide-4">
+                <div class="image-section">
+                    <svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M150 40 L200 100 L200 160 L150 200 L100 160 L100 100 Z" fill="#1A2B3C"/>
+                        <path d="M150 80 L180 120 L150 160 L120 120 Z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="text-section">
+                    <h2 class="main-title" style="font-size: 38px;">دروازه امن: حفاظت و دقت در یک نشان واحد</h2>
+                    <div class="metaphors-container">
+                        <div class="metaphor-item">
+                            <div class="metaphor-number">استعاره ۱</div>
+                            <div class="metaphor-title">سپر</div>
+                            <div class="metaphor-description">شکل کلی شبیه به تاج یا سپر، تداعی‌کننده قدرتمند و فوری امنیت و حفاظت است</div>
+                        </div>
+                        <div class="metaphor-item">
+                            <div class="metaphor-number">استعاره ۲</div>
+                            <div class="metaphor-title">ستون</div>
+                            <div class="metaphor-description">عنصر عمودی مرکزی نماد یک پایه قوی و تزلزل‌ناپذیر است</div>
+                        </div>
+                        <div class="metaphor-item">
+                            <div class="metaphor-number">استعاره ۳</div>
+                            <div class="metaphor-title">هندسه درهم‌تنیده</div>
+                            <div class="metaphor-description">زوایای دقیق و تیز، دقت فنی و مهندسی پیچیده را منتقل می‌کنند</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Construction -->
+        <div class="slide-wrapper">
+            <div class="slide-container slide-5">
+                <h2 class="main-title" style="margin-bottom: 60px; max-width: 900px;">یکپارچگی هندسی تضمین‌کننده مقیاس‌پذیری و ثبات بی‌پایان است</h2>
+                <div class="principles-grid">
+                    <div class="principle-block">
+                        <div class="principle-title">تقارن</div>
+                        <div class="principle-text">نشان در محور عمودی کاملاً متقارن است و حس تعادل، ثبات و اقتدار را ایجاد می‌کند</div>
+                    </div>
+                    <div class="principle-block">
+                        <div class="principle-title">سیستم شبکه‌ای</div>
+                        <div class="principle-text">لوگو بر اساس یک شبکه هندسی دقیق ساخته شده است</div>
+                    </div>
+                    <div class="principle-block">
+                        <div class="principle-title">مقیاس‌پذیری</div>
+                        <div class="principle-text">می‌تواند بدون افت کیفیت، از یک آیکون کوچک تا تابلوهای بزرگ مقیاس‌بندی شود</div>
+                    </div>
+                    <div class="principle-block">
+                        <div class="principle-title">فضای خالی مشخص</div>
+                        <div class="principle-text">یک فضای خالی تعریف شده در اطراف لوگو یکپارچگی را حفظ می‌کند</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Palette -->
+        <div class="slide-wrapper">
+            <div class="slide-container slide-6">
+                <h2 class="main-title" style="margin-bottom: 50px;">اقتدار و نوآوری: یک سیستم رنگی برای اعتماد</h2>
+                <div class="palette-grid">
+                    <div class="color-item">
+                        <div class="color-swatch navy"></div>
+                        <div class="color-info">
+                            <div class="color-name">سرمه‌ای اصلی</div>
+                            <div class="color-codes">HEX: #1A2B3C<br>RGB: 26, 43, 60<br>CMYK: 57, 28, 0, 76</div>
+                            <div class="color-rationale">رنگ عمیق و مقتدرانه نشان‌دهنده اعتماد و اقتدار</div>
+                        </div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch cyan"></div>
+                        <div class="color-info">
+                            <div class="color-name">فیروزه‌ای تاکیدی</div>
+                            <div class="color-codes">HEX: #00BFFF<br>RGB: 0, 191, 255<br>CMYK: 80, 25, 0, 0</div>
+                            <div class="color-rationale">رنگ پر جنب و جوش نشان‌دهنده سرعت و فناوری</div>
+                        </div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch silver"></div>
+                        <div class="color-info">
+                            <div class="color-name">نقره‌ای برتر</div>
+                            <div class="color-codes">HEX: #B0B0B0<br>RGB: 176, 176, 176<br>CMYK: 0, 0, 0, 31</div>
+                            <div class="color-rationale">نشان‌دهنده کیفیت بالا و احساس برتری</div>
+                        </div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch white"></div>
+                        <div class="color-info">
+                            <div class="color-name">سفید خالص</div>
+                            <div class="color-codes">HEX: #FFFFFF<br>RGB: 255, 255, 255<br>CMYK: 0, 0, 0, 0</div>
+                            <div class="color-rationale">ضروری برای خوانایی و کنتراست بالا</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Versatility -->
+        <div class="slide-wrapper">
+            <div class="slide-container slide-7">
+                <div class="image-section">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 380px;">
+                        <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M80 30 L110 60 L110 100 L80 130 L50 100 L50 60 Z" fill="#1A2B3C"/>
+                        </svg>
+                        <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M80 30 L110 60 L110 100 L80 130 L50 100 L50 60 Z" fill="white" stroke="#1A2B3C" stroke-width="2"/>
+                        </svg>
+                        <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="160" height="160" fill="#1A2B3C"/>
+                            <path d="M80 30 L110 60 L110 100 L80 130 L50 100 L50 60 Z" fill="#00BFFF"/>
+                        </svg>
+                        <svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="160" height="160" fill="#FFFFFF"/>
+                            <path d="M80 30 L110 60 L110 100 L80 130 L50 100 L50 60 Z" fill="#1A2B3C"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-section">
+                    <h2 class="main-title" style="font-size: 40px;">انعطاف‌پذیری: سازگاری با هر محیط</h2>
+                    <div class="values-container">
+                        <div class="value-item">
+                            <div class="value-title">تک رنگ</div>
+                            <div class="value-description">برای استفاده در پس‌زمینه‌های تک رنگ یا حکاکی</div>
+                        </div>
+                        <div class="value-item">
+                            <div class="value-title">معکوس</div>
+                            <div class="value-description">برای استفاده در پس‌زمینه‌های تیره یا رنگی</div>
+                        </div>
+                        <div class="value-item">
+                            <div class="value-title">با کادر</div>
+                            <div class="value-description">برای استفاده در مواردی که نیاز به جداسازی بصری قوی است</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Typography -->
+        <div class="slide-wrapper">
+            <div class="slide-container slide-8">
+                <h2 class="main-title" style="margin-bottom: 50px;">تایپوگرافی: وضوح و اقتدار</h2>
+                <div class="font-section">
+                    <div class="font-block">
+                        <div class="font-title">Vazirmatn (تیترها)</div>
+                        <div class="font-example">امنیت، کیفیت، نوآوری</div>
+                        <div class="font-description">فونت فارسی مدرن و خوانا، حس قدرت و رسمیت را منتقل می‌کند.</div>
+                    </div>
+                    <div class="font-block">
+                        <div class="font-title">Roboto (متن بدنه)</div>
+                        <div class="font-example" style="font-family: 'Roboto', sans-serif;">The quick brown fox jumps over the lazy dog.</div>
+                        <div class="font-description">فونت بدون سریف خنثی و جهانی، تضمین‌کننده خوانایی در هر اندازه.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 9: Conclusion -->
+        <div class="slide-wrapper">
+            <div class="slide-container slide-9">
+                <h2 class="main-title" style="color: white; margin-bottom: 60px; max-width: 900px;">سیف تل: یک هویت برند برای آینده‌ای امن</h2>
+                <div class="conclusion-grid">
+                    <div class="conclusion-block">
+                        <div class="block-title" style="color: white;">وعده برند</div>
+                        <div class="block-text" style="color: #F0F2F5;">امنیت در سطح نظامی با ظرافت مینیمالیستی</div>
+                    </div>
+                    <div class="conclusion-block">
+                        <div class="block-title" style="color: white;">هدف</div>
+                        <div class="block-text" style="color: #F0F2F5;">تثبیت سیف تل به عنوان رهبر بازار در ارتباطات همراه امن و پیشرفته</div>
+                    </div>
+                </div>
+                <div class="accent-divider" style="background: white;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-controls">
+        <button id="prev-btn" class="nav-btn" disabled>قبلی</button>
+        <button id="next-btn" class="nav-btn">بعدی</button>
+    </div>
+    <div id="slide-counter" class="slide-counter">اسلاید ۱ از ۹</div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide-wrapper');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const slideCounter = document.getElementById('slide-counter');
+        let currentSlide = 0;
+
+        function updateSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+            currentSlide = index;
+            updateControls();
+        }
+
+        function updateControls() {
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+            slideCounter.textContent = `اسلاید ${currentSlide + 1} از ${slides.length}`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                updateSlide(currentSlide - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                updateSlide(currentSlide + 1);
+            }
+        });
+
+        // Initialize the first slide and controls
+        updateSlide(0);
+    </script>
+</body>
+</html>
