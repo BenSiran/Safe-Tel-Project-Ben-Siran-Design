@@ -1,24 +1,22 @@
-         <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAFE TEL - Brand Identity System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&family=Vazirmatn:wght@300;700&display=swap" rel="stylesheet">
+    <title>SAFE TEL - Brand Identity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-teal: #7DD3C0; 
-            --deep-navy: #0f172a;
-            --accent-gold: #F59E0B;
-            --slide-bg: #f8fafc;
+            --primary-teal: #7DD3C0;
+            --dark-navy: #0f172a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Vazirmatn', sans-serif;
-            background: var(--deep-navy);
-            color: white;
+            background: #f1f5f9;
+            color: var(--dark-navy);
             overflow: hidden;
         }
         
@@ -29,48 +27,53 @@
         
         .slide-wrapper {
             width: 1280px; height: 720px;
-            background: var(--slide-bg); color: var(--deep-navy);
+            background: white;
             display: none; position: relative;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-            border-radius: 12px; overflow: hidden;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+            border-radius: 16px; overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
         }
         
-        .slide-wrapper.active { display: flex; animation: fadeIn 0.5s ease-out; }
+        .slide-wrapper.active { display: flex; animation: slideIn 0.4s ease-out; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* ساختار لوگوی وکتور بر اساس تصاویر ارسالی */
-        .logo-container { width: 320px; height: auto; transition: 0.3s; }
-        .logo-svg { width: 100%; height: auto; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
         .slide-content {
             width: 100%; height: 100%;
             display: grid; grid-template-columns: 1fr 1fr;
-            align-items: center; padding: 60px 100px;
+            align-items: center; padding: 0 80px;
         }
 
-        .text-section h1 { font-size: 50px; font-weight: 700; color: var(--deep-navy); line-height: 1.3; margin-bottom: 20px; }
-        .text-section p { font-size: 18px; color: #64748b; line-height: 1.8; }
+        .text-side { padding-right: 40px; }
+        .image-side { display: flex; justify-content: center; align-items: center; }
         
+        /* نمایش لوگوهای اصلی شما */
+        .main-logo-img {
+            max-width: 450px;
+            max-height: 450px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+        }
+
+        .title { font-size: 54px; font-weight: 700; margin-bottom: 20px; color: var(--dark-navy); }
+        .description { font-size: 20px; color: #64748b; line-height: 1.6; }
+
         .nav-controls {
             position: fixed; bottom: 30px; left: 50%;
-            transform: translateX(-50%); display: flex; gap: 15px; z-index: 100;
+            transform: translateX(-50%); display: flex; gap: 20px;
         }
-        .nav-btn {
-            background: var(--primary-teal); color: var(--deep-navy);
-            border: none; padding: 12px 35px; border-radius: 50px;
-            cursor: pointer; font-weight: 700; transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(125, 211, 192, 0.4);
+        
+        .btn {
+            background: var(--dark-navy); color: white;
+            border: none; padding: 12px 40px; border-radius: 8px;
+            cursor: pointer; font-family: 'Vazirmatn'; font-weight: 700;
         }
-        .nav-btn:hover { transform: scale(1.05); background: #6bc4b1; }
-        .nav-btn:disabled { background: #cbd5e1; color: #94a3b8; box-shadow: none; }
 
-        .slide-number { position: absolute; bottom: 30px; right: 40px; font-family: 'Montserrat'; font-weight: 600; color: #cbd5e1; }
-
-        /* Color Palette Display */
-        .palette-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
-        .color-box { padding: 25px; border-radius: 15px; background: white; border: 1px solid #e2e8f0; }
-        .swatch { height: 60px; border-radius: 8px; margin-bottom: 15px; }
+        .btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+        
+        .dots { position: absolute; bottom: 40px; right: 80px; display: flex; gap: 10px; }
+        .dot { width: 10px; height: 10px; background: #e2e8f0; border-radius: 50%; }
+        .dot.active { background: var(--primary-teal); width: 30px; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -79,92 +82,65 @@
         
         <div class="slide-wrapper active">
             <div class="slide-content">
-                <div class="text-section">
-                    <div style="width: 60px; height: 6px; background: var(--primary-teal); margin-bottom: 30px;"></div>
-                    <h1>هویت بصری<br>برند SAFE TEL</h1>
-                    <p>ترکیب امنیت در سطح نظامی با ظرافت طراحی مدرن برای پیشگامان تکنولوژی ارتباطات.</p>
+                <div class="text-side">
+                    <h1 class="title">هویت بصری برتر</h1>
+                    <p class="description">نمایش لوگوی رسمی SAFE TEL بر پایه استانداردهای مدرن امنیتی و ارتباطی.</p>
                 </div>
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                    <div class="logo-container">
-                        <svg class="logo-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M100 20 L160 50 L160 160 L100 210 L40 160 L40 50 Z" fill="var(--primary-teal)" />
-                            <path d="M100 50 L135 80 L100 115 L65 80 Z" fill="white" opacity="0.9" />
-                            <path d="M100 130 L130 160 L100 190 L70 160 Z" fill="white" opacity="0.7" />
-                        </svg>
-                    </div>
-                    <h2 style="font-family: 'Montserrat'; letter-spacing: 12px; margin-top: 20px; color: var(--deep-navy);">SAFE TEL</h2>
+                <div class="image-side">
+                    <img src="https://i.ibb.co/C3FLzjhx/1.png" class="main-logo-img" alt="Safe Tel Logo Dark">
                 </div>
             </div>
-            <div class="slide-number">01</div>
+            <div class="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
         </div>
 
         <div class="slide-wrapper">
             <div class="slide-content">
-                <div class="text-section">
-                    <h1>زبان رنگ‌ها</h1>
-                    <p>رنگ Teal Prime به عنوان نماد هوش و نوآوری، در کنار Slate Deep که حس امنیت و پایداری را منتقل می‌کند.</p>
+                <div class="text-side">
+                    <h1 class="title">تکنولوژی و اعتماد</h1>
+                    <p class="description">استفاده از پالت رنگی Teal برای انتقال حس نوآوری و سرعت در خدمات دیجیتال.</p>
                 </div>
-                <div class="palette-grid">
-                    <div class="color-box">
-                        <div class="swatch" style="background: var(--primary-teal);"></div>
-                        <h4 style="font-family: 'Montserrat';">#7DD3C0</h4>
-                        <p>Teal Primary</p>
-                    </div>
-                    <div class="color-box">
-                        <div class="swatch" style="background: var(--deep-navy);"></div>
-                        <h4 style="font-family: 'Montserrat';">#0F172A</h4>
-                        <p>Slate Deep</p>
-                    </div>
+                <div class="image-side">
+                    <img src="https://i.ibb.co/fY4GT03b/2.png" class="main-logo-img" alt="Safe Tel Logo Teal">
                 </div>
             </div>
-            <div class="slide-number">02</div>
+            <div class="dots"><div class="dot"></div><div class="dot active"></div><div class="dot"></div></div>
         </div>
 
         <div class="slide-wrapper">
-            <div class="slide-content" style="grid-template-columns: 1fr;">
-                <div style="text-align: center;">
-                    <h1 style="margin-bottom: 40px;">استاندارد نوشتاری</h1>
-                    <div style="display: flex; justify-content: space-around; align-items: center; background: white; padding: 60px; border-radius: 20px;">
-                        <div style="text-align: center;">
-                            <p style="color: #94a3b8; margin-bottom: 15px;">Primary Font (EN)</p>
-                            <h2 style="font-family: 'Montserrat'; font-size: 40px; font-weight: 800;">Montserrat</h2>
-                        </div>
-                        <div style="width: 2px; height: 100px; background: #e2e8f0;"></div>
-                        <div style="text-align: center;">
-                            <p style="color: #94a3b8; margin-bottom: 15px;">فونت اصلی (FA)</p>
-                            <h2 style="font-family: 'Vazirmatn'; font-size: 40px; font-weight: 700;">وزیر متن</h2>
-                        </div>
-                    </div>
+            <div class="slide-content">
+                <div class="text-side">
+                    <h1 class="title">شفافیت و وضوح</h1>
+                    <p class="description">طراحی متمایز که در هر مقیاسی، از آیکون اپلیکیشن تا بیلبوردهای شهری، قدرت خود را حفظ می‌کند.</p>
+                </div>
+                <div class="image-side">
+                    <img src="https://i.ibb.co/VWMsLZdG/3.png" class="main-logo-img" alt="Safe Tel Logo White">
                 </div>
             </div>
-            <div class="slide-number">03</div>
+            <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot active"></div></div>
         </div>
 
     </div>
 
     <div class="nav-controls">
-        <button id="prev-btn" class="nav-btn" disabled>قبلی</button>
-        <button id="next-btn" class="nav-btn">بعدی</button>
+        <button id="prev" class="btn" disabled>قبلی</button>
+        <button id="next" class="btn">بعدی</button>
     </div>
 
     <script>
         const slides = document.querySelectorAll('.slide-wrapper');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        let currentSlide = 0;
+        const prev = document.getElementById('prev');
+        const next = document.getElementById('next');
+        let current = 0;
 
-        function updateSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                if (i === index) slide.classList.add('active');
-            });
-            currentSlide = index;
-            prevBtn.disabled = currentSlide === 0;
-            nextBtn.disabled = currentSlide === slides.length - 1;
+        function showSlide(index) {
+            slides.forEach((s, i) => s.classList.toggle('active', i === index));
+            current = index;
+            prev.disabled = current === 0;
+            next.disabled = current === slides.length - 1;
         }
 
-        prevBtn.addEventListener('click', () => { if (currentSlide > 0) updateSlide(currentSlide - 1); });
-        nextBtn.addEventListener('click', () => { if (currentSlide < slides.length - 1) updateSlide(currentSlide + 1); });
+        prev.addEventListener('click', () => showSlide(current - 1));
+        next.addEventListener('click', () => showSlide(current + 1));
     </script>
 </body>
 </html>
